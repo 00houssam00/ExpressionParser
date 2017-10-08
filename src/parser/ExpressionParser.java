@@ -109,7 +109,7 @@ public class ExpressionParser {
             while (j > 0) {
                 Expression node = nodes.get(i);
                 nodes.remove(i);
-                pNode.addOperand(node);
+                pNode.addChild(node);
                 j--;
             }
 

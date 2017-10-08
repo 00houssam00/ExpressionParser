@@ -13,31 +13,31 @@ public class Expression {
 	// ============================================================
 	private Token token;
 	private Expression parent;
-	private ArrayList<Expression> operandList;
+	private ArrayList<Expression> children;
 	
     // ============================================================
     // Constructors
     // ============================================================
 	public Expression(Token token){
 		this.token = token;
-		this.operandList = new ArrayList<Expression>();
+		this.children = new ArrayList<Expression>();
 	}
 	
 	// ============================================================
     // Methods
     // ============================================================
-	public void addOperand(Expression operand){
+	public void addChild(Expression operand){
 		operand.parent = this;
-		operandList.add(operand);
+		children.add(operand);
 	}
 	
-	public void addOperand(int index, Expression operand) {
+	public void addChild(int index, Expression operand) {
 		operand.parent = this;
-        operandList.add(index, operand);
+        children.add(index, operand);
     }
 	
-	public Expression removeOperand(int index){
-        return operandList.remove(index);
+	public Expression removeChild(int index){
+        return children.remove(index);
 	}
 	
 	public Expression clone(){
@@ -48,26 +48,26 @@ public class Expression {
 	
 	public void clone(Expression tree, Expression clone){
         for(int i = 0; i < tree.getOperandSize(); i++){
-            Expression child = tree.getOperand(i);
+            Expression child = tree.getChild(i);
             Expression copy = new Expression(child.getToken().clone());
-            clone.addOperand(copy);
-            clone(tree.getOperand(i), clone.getOperand(i));
+            clone.addChild(copy);
+            clone(tree.getChild(i), clone.getChild(i));
         }
     }
 	
 	// ============================================================
     // GETTERS / SETTERS
     // ============================================================	
-	public ArrayList<Expression> getOperands(){
-	    return operandList;
+	public ArrayList<Expression> getChildren(){
+	    return children;
 	}
 	
 	public int getOperandSize(){
-	    return operandList.size();
+	    return children.size();
 	}
 	  
-	public Expression getOperand(int i){
-	     return operandList.get(i);
+	public Expression getChild(int i){
+	     return children.get(i);
 	}
 	  
 	public Token getToken(){

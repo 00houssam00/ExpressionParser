@@ -19,7 +19,7 @@ public class ExpressionBuilder {
 	}
 
 	private static void remove(TokenID tokenID, Expression expression){
-		Iterator<Expression> operands = expression.getOperands().iterator();
+		Iterator<Expression> operands = expression.getChildren().iterator();
 		ArrayList<Expression> childrenToAdd = new ArrayList<Expression>();
 		
 		//
@@ -30,7 +30,7 @@ public class ExpressionBuilder {
 				operands.remove();
 				
 				//
-				childrenToAdd.addAll(exp.getOperands());
+				childrenToAdd.addAll(exp.getChildren());
 			} else {
 				remove(tokenID, exp);
 			}
@@ -39,7 +39,7 @@ public class ExpressionBuilder {
 		//
 		for(Expression exp : childrenToAdd){
 			remove(tokenID, exp);
-			expression.getOperands().add(exp);
+			expression.getChildren().add(exp);
 		}
 	}
 	
@@ -61,16 +61,16 @@ public class ExpressionBuilder {
         Expression tree = new Expression(new Token(expression.getToken().getTokenID(), expression.getToken().getSequence()));
 
         for(int i = 0; i < expression.getOperandSize(); i++)
-            tree.addOperand(collapse(tokenID, expression.getOperand(i)));
+            tree.addChild(collapse(tokenID, expression.getChild(i)));
 
         if (tree.getToken().getTokenID() == tokenID) {
             ArrayList<Expression> u = new ArrayList<>();
 
             for(int i = 0; i < tree.getOperandSize(); i++){
-                Expression child = tree.getOperand(i);
+                Expression child = tree.getChild(i);
 
                 if (child.getToken().getTokenID() == tokenID) {
-                    u.addAll(child.getOperands());
+                    u.addAll(child.getChildren());
                 }else{
                     u.add(child);
                 }
@@ -85,7 +85,7 @@ public class ExpressionBuilder {
     
     public static Expression construct(Expression operator, ArrayList<Expression> operands) {
         for (Expression opr : operands)
-            operator.addOperand(opr.clone());
+            operator.addChild(opr.clone());
 
         return operator;
     }
